@@ -1,0 +1,204 @@
+.api-key-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  text-align: center;
+  padding: 24px;
+  background-image: 
+    linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: background-pan 30s linear infinite;
+}
+
+@keyframes background-pan {
+  from { background-position: 0 0; }
+  to { background-position: 400px 400px; }
+}
+
+.api-key-container {
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--color-purple);
+  border-radius: 16px;
+  box-shadow: 0 0 30px rgba(126, 43, 255, 0.6);
+  padding: 40px;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  animation: fadeIn 1s ease-out;
+  backdrop-filter: blur(8px);
+}
+
+.api-key-container h1 {
+  font-family: var(--font-heading);
+  font-size: 3.5rem;
+  color: var(--color-cyan);
+  text-shadow: 0 0 8px var(--color-cyan), 0 0 15px var(--color-purple), 0 0 25px var(--color-pink);
+  margin-bottom: 24px;
+  animation: neon-flicker 3s infinite alternate;
+}
+
+@keyframes neon-flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    text-shadow: 
+      0 0 5px #fff, 0 0 10px var(--color-cyan), 
+      0 0 20px var(--color-cyan), 0 0 40px var(--color-purple), 
+      0 0 70px var(--color-purple);
+  }
+  20%, 24%, 55% { text-shadow: none; }
+}
+
+.description {
+  color: var(--color-text);
+  margin-bottom: 32px;
+  line-height: 1.7;
+  font-size: 1.1rem;
+}
+
+.input-group {
+  margin-bottom: 24px;
+  position: relative;
+}
+
+.api-key-input {
+  width: 100%;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid var(--color-purple);
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  color: var(--color-text);
+  transition: all 0.3s ease;
+}
+
+.api-key-input:focus {
+  outline: none;
+  border-color: var(--color-cyan);
+  box-shadow: 0 0 15px var(--color-cyan);
+}
+
+.api-key-input::placeholder {
+  color: rgba(224, 224, 224, 0.5);
+}
+
+.error-message {
+  color: var(--color-pink);
+  font-size: 1.1rem;
+  margin-top: 12px;
+  text-shadow: 0 0 5px var(--color-pink);
+  animation: shake 0.5s;
+  text-align: left;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(45deg, var(--color-pink), var(--color-purple));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-heading);
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 15px var(--color-pink);
+  text-transform: uppercase;
+}
+
+.submit-button:hover {
+  box-shadow: 0 0 25px var(--color-pink), 0 0 40px var(--color-purple);
+  transform: translateY(-3px);
+}
+
+.submit-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.info-text {
+  font-size: 0.9rem;
+  color: rgba(224, 224, 224, 0.7);
+  margin-top: 24px;
+}
+
+.info-text a {
+  color: var(--color-cyan);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.info-text a:hover {
+  text-decoration: underline;
+  text-shadow: 0 0 5px var(--color-cyan);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Dark mode styles */
+:root.dark .api-key-login {
+  background-color: #121212;
+}
+
+:root.dark .api-key-container {
+  background-color: #1e1e1e;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+:root.dark .api-key-container h1 {
+  color: #e6e6e6;
+}
+
+:root.dark .description {
+  color: #a0a0a0;
+}
+
+:root.dark .input-group label {
+  color: #d1d5db;
+}
+
+:root.dark .api-key-input {
+  background-color: #2d2d33;
+  border-color: #333333;
+  color: #e6e6e6;
+}
+
+:root.dark .api-key-input:focus {
+  border-color: #4169e1;
+  box-shadow: 0 0 0 3px rgba(65, 105, 225, 0.15);
+}
+
+:root.dark .api-key-input::placeholder {
+  color: #6b7280;
+}
+
+:root.dark .login-button {
+  background-color: #4169e1;
+}
+
+:root.dark .login-button:hover {
+  background-color: #3a5dcc;
+}
+
+:root.dark .info-text {
+  color: #9ca3af;
+}
+
+:root.dark .info-text a {
+  color: #4169e1;
+}

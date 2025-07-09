@@ -1,0 +1,53 @@
+#root {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Make sure that everything fills the available space */
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+/* Global Synthwave styles */
+:root {
+  --font-heading: 'Audiowide', sans-serif;
+  --font-body: 'VT323', monospace;
+  --color-pink: #ff2a6d;
+  --color-purple: #7e2bff;
+  --color-cyan: #00f2ff;
+  --color-bg: #1a1a2e;
+  --color-text: #e0e0e0;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 20px; /* VT323 looks better a bit larger */
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  color: var(--color-cyan);
+  text-shadow: 0 0 5px var(--color-cyan), 0 0 10px var(--color-purple);
+}
+
+button {
+  font-family: var(--font-heading);
+}
+
+/* Fix any viewport issues on mobile */
+@media (max-width: 768px) {
+  #root {
+    height: 100dvh; /* dynamic viewport height for mobile */
+  }
+}

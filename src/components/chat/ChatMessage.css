@@ -1,0 +1,105 @@
+.chat-message {
+  display: flex;
+  margin-bottom: 16px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.chat-message.user {
+  justify-content: flex-end;
+  margin-left: auto;
+}
+
+.chat-message.assistant {
+  justify-content: flex-start;
+  margin-right: auto;
+}
+
+.message-bubble {
+  padding: 16px 22px;
+  border-radius: 20px;
+  word-wrap: break-word;
+  line-height: 1.6;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.chat-message.user .message-bubble {
+  background: rgba(126, 43, 255, 0.8);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 15px rgba(126, 43, 255, 0.5);
+  border-bottom-right-radius: 5px;
+}
+
+.chat-message.assistant .message-bubble {
+  background: rgba(20, 20, 40, 0.8);
+  color: var(--color-text);
+  border: 1px solid var(--color-pink);
+  box-shadow: 0 0 15px rgba(255, 42, 109, 0.4);
+  border-bottom-left-radius: 5px;
+}
+
+.message-content a {
+  color: var(--color-cyan);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--color-cyan);
+  transition: all 0.2s ease;
+}
+
+.message-content a:hover {
+  color: white;
+  background: var(--color-cyan);
+}
+
+.message-content pre {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--color-purple);
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-family: 'VT323', monospace;
+  font-size: 1.1rem;
+  color: var(--color-cyan);
+}
+
+.message-content code {
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 3px 6px;
+  border-radius: 4px;
+  font-family: 'VT323', monospace;
+  color: var(--color-pink);
+}
+
+.message-content pre code {
+  background: none;
+  padding: 0;
+}
+
+.message-content blockquote {
+  border-left: 3px solid var(--color-pink);
+  padding-left: 16px;
+  margin: 1em 0;
+  color: rgba(224, 224, 224, 0.8);
+  font-style: italic;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark mode styles */
+:root.dark .chat-message.assistant .message-bubble {
+  background-color: #2d2d33;
+  color: #e6e6e6;
+}
+
+:root.dark .chat-message.user .message-bubble {
+  background-color: #4169e1;
+}

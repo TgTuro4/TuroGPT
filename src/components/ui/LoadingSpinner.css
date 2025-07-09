@@ -1,0 +1,38 @@
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 12px auto;
+}
+
+.spinner > div {
+  width: 10px;
+  height: 10px;
+  background-color: #2b5dfc;
+  border-radius: 100%;
+  display: inline-block;
+  margin: 0 3px;
+  animation: bounce 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  animation-delay: -0.16s;
+}
+
+@keyframes bounce {
+  0%, 80%, 100% { 
+    transform: scale(0);
+  } 
+  40% { 
+    transform: scale(1.0);
+  }
+}
+
+/* Dark mode */
+:root.dark .spinner > div {
+  background-color: #4169e1;
+}

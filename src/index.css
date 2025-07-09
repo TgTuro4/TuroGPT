@@ -1,0 +1,105 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #333333;
+  background-color: #ffffff;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark mode variables */
+:root.dark {
+  color-scheme: dark;
+  color: #e6e6e6;
+  background-color: #1a1a1a;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+a {
+  color: #2b5dfc;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+:root.dark a {
+  color: #4169e1;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* Transitions for theme switching */
+html {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #cccccc;
+  border-radius: 20px;
+}
+
+:root.dark ::-webkit-scrollbar-thumb {
+  background-color: #555555;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #aaaaaa;
+}
+
+:root.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: #777777;
+}
+
+/* Focus styles */
+:focus {
+  outline: 2px solid #2b5dfc;
+  outline-offset: 2px;
+}
+
+:root.dark :focus {
+  outline-color: #4169e1;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+}
