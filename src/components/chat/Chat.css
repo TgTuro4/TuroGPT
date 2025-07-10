@@ -6,7 +6,6 @@
 }
 
 .chat-history {
-  width: 20%;  /* 20% of parent width */
   min-width: 100px;  
   max-width: 200px;
   height: 100%;
@@ -17,7 +16,6 @@
   transition: all 0.3s ease;
   position: absolute;
   z-index: 100;
-  left: -20%;  /* Match width */
 }
 
 .chat-history.open {

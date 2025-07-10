@@ -2,7 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import type { ChatMessage } from '../types/chat';
 import { fetchChatCompletion } from '../services/api';
 import { generateId } from '../utils/helpers';
-import { saveChat, updateChat, getChats, getChat, deleteChat, clearChats } from '../services/chatStorage';
+import { saveChat, updateChat, getChats, getChat, deleteChat } from '../services/chatStorage';
 
 interface UseChatProps {
   initialChatId?: string;
@@ -38,20 +38,7 @@ export const useChat = ({ initialChatId, onChatChange }: UseChatProps = {}) => {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
-  // Save chat to storage
-  const saveCurrentChat = useCallback(() => {
-    if (messages.length === 0 || !apiKey) return null;
-    
-    if (currentChatId) {
-      updateChat(currentChatId, messages, apiKey);
-      return currentChatId;
-    } else {
-      const newChatId = saveChat(messages, apiKey);
-      setCurrentChatId(newChatId);
-      if (onChatChange) onChatChange(newChatId);
-      return newChatId;
-    }
-  }, [messages, currentChatId, apiKey, onChatChange]);
+
 
   // Send message to API and handle response
   const sendMessage = useCallback(async (content: string) => {
@@ -110,7 +97,7 @@ export const useChat = ({ initialChatId, onChatChange }: UseChatProps = {}) => {
     } finally {
       setIsLoading(false);
     }
-  }, [messages, apiKey, onChatChange]);
+  }, [messages, apiKey, onChatChange, currentChatId]);
 
   // Get all chats from storage
   const getAllChats = useCallback(() => {
@@ -146,13 +133,74 @@ export const useChat = ({ initialChatId, onChatChange }: UseChatProps = {}) => {
     setError(null);
   }, [currentChatId, apiKey]);
 
+
+  // Upload a file as a message
+  const uploadFile = useCallback((file: File) => {
+    if (!apiKey) return;
+    if (!file.type.startsWith('image/')) {
+      setError('Only image files are supported.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = async () => {
+      const fileData = reader.result as string;
+      const fileMessage: ChatMessage = {
+        role: 'user',
+        content: '',
+        id: generateId(),
+        fileData,
+        fileName: file.name,
+        fileType: file.type,
+      };
+      const updatedMessages = [...messages, fileMessage];
+      setMessages(updatedMessages);
+      let chatId = currentChatId;
+      if (chatId) {
+        updateChat(chatId, updatedMessages, apiKey);
+      } else {
+        chatId = saveChat(updatedMessages, apiKey);
+        setCurrentChatId(chatId);
+        if (onChatChange) onChatChange(chatId);
+      }
+
+      // Send image message to API
+      setIsLoading(true);
+      setError(null);
+      try {
+        const apiMessages = updatedMessages.map((msg) => ({
+          role: msg.role,
+          content: msg.fileData
+            ? `![${msg.fileName}](${msg.fileData})`
+            : msg.content,
+        }));
+        const response = await fetchChatCompletion(apiMessages.map(({ role, content }) => ({ role, content } as any)));
+        const assistantMessage: ChatMessage = {
+          role: 'assistant',
+          content: response.choices[0].message.content,
+          id: generateId(),
+        };
+        const finalMessages = [...updatedMessages, assistantMessage];
+        setMessages(finalMessages);
+        if (chatId) {
+          updateChat(chatId, finalMessages, apiKey);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        console.error('Error sending image message:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    reader.readAsDataURL(file);
+  }, [apiKey, messages, currentChatId, onChatChange]);
+
   return {
     messages,
     currentChatId,
     isLoading,
     error,
     sendMessage,
-    saveCurrentChat,
+    uploadFile,
     getAllChats,
     loadChat,
     startNewChat,

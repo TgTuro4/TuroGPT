@@ -70,6 +70,19 @@ export const getChat = (chatId: string, apiKey: string): StoredChat | null => {
   return chats.find((chat) => chat.id === chatId) || null;
 };
 
+export const updateChatTitle = (chatId: string, newTitle: string, apiKey: string): void => {
+  const chats = getChats(apiKey);
+  const chatIndex = chats.findIndex((chat) => chat.id === chatId);
+  if (chatIndex === -1) return;
+  const updatedChats = [...chats];
+  updatedChats[chatIndex] = {
+    ...updatedChats[chatIndex],
+    title: newTitle,
+    lastUpdated: Date.now(),
+  };
+  localStorage.setItem(CHAT_STORAGE_KEY, JSON.stringify(updatedChats));
+};
+
 export const deleteChat = (chatId: string, apiKey: string): void => {
   const chats = getChats(apiKey);
   const updatedChats = chats.filter((chat) => chat.id !== chatId);

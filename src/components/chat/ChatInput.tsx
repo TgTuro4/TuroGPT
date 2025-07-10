@@ -3,10 +3,11 @@ import './ChatInput.css';
 
 interface ChatInputProps {
   onSend: (message: string) => void;
+  onFileUpload?: (file: File) => void;
   disabled: boolean;
 }
 
-export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
+export const ChatInput = ({ onSend, onFileUpload, disabled }: ChatInputProps) => {
   const [input, setInput] = useState('');
 
   const handleSubmit = (e: FormEvent) => {
@@ -55,6 +56,13 @@ export const ChatInput = ({ onSend, disabled }: ChatInputProps) => {
           <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
         </svg>
       </button>
+      <input
+        type="file"
+        className="file-input"
+        accept="image/*"
+        onChange={(e) => { if (e.target.files) onFileUpload?.(e.target.files[0]); e.target.value = ''; }}
+        disabled={disabled}
+      />
     </form>
   );
 };

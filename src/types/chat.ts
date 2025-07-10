@@ -4,6 +4,10 @@ export interface ChatMessage {
   role: MessageRole;
   content: string;
   id: string;
+  // Optional file attachment
+  fileData?: string;
+  fileName?: string;
+  fileType?: string;
 }
 
 export interface ChatCompletionRequest {

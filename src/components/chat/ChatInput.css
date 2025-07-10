@@ -1,4 +1,7 @@
 .chat-input-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 20px 24px;
   background: rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
@@ -66,4 +69,15 @@
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+}
+
+.file-input {
+  margin-left: 8px;
+  cursor: pointer;
+  color: var(--color-text);
+}
+
+.file-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

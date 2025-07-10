@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 import { ChatInput } from './ChatInput';
 import { ChatMessage as ChatMessageComponent } from './ChatMessage';
 import { ChatHistory } from './ChatHistory';
@@ -7,6 +7,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { clearApiKey } from '../../services/api';
 import './Chat.css';
 
+/**
+ * Main chat interface component.
+ * Manages chat history, message display, and user input.
+ * @param {object} props - Component props.
+ * @param {() => void} [props.onLogout] - Optional callback to handle user logout.
+ */
 interface ChatProps {
   onLogout?: () => void;
 }
@@ -14,6 +20,8 @@ interface ChatProps {
 export const Chat = ({ onLogout }: ChatProps = {}) => {
   const { chatId } = useParams<{ chatId?: string }>();
   const navigate = useNavigate();
+  // State to force-refresh the chat list when a title is renamed.
+  const [chatListVersion, setChatListVersion] = useState(0);
 
   const {
     messages,
@@ -26,17 +34,25 @@ export const Chat = ({ onLogout }: ChatProps = {}) => {
     getAllChats,
     loadChat,
     messagesEndRef,
+    uploadFile,
   } = useChat({
     initialChatId: chatId,
     onChatChange: (newChatId) => {
+      // If the chat ID changes, navigate to the new URL.
       if (newChatId !== chatId) {
         navigate(`/chat/${newChatId}`, { replace: true });
+      }
+      // If a new chat is created (i.e., there was no previous chatId),
+      // increment the version to force a re-render of the chat list.
+      if (!chatId && newChatId) {
+        setChatListVersion((v) => v + 1);
       }
     },
   });
 
   // Get all chats for the sidebar
-  const chats = getAllChats();
+  // Memoize chat list fetching to avoid re-fetching on every render.
+  const chats = useMemo(() => getAllChats(), [getAllChats, chatListVersion]);
 
   // Handle new chat
   const handleNewChat = useCallback(() => {
@@ -49,6 +65,29 @@ export const Chat = ({ onLogout }: ChatProps = {}) => {
     loadChat(chatId);
   }, [loadChat]);
 
+  // Handle chat renaming
+  const handleRenameChat = useCallback(
+    (chatId: string, newTitle: string) => {
+      // Update in storage
+      const apiKey = localStorage.getItem('openai_api_key') || '';
+      if (!apiKey) return;
+      // Dynamically import to avoid circular dep
+      import('../../services/chatStorage').then(({ updateChatTitle }) => {
+        updateChatTitle(chatId, newTitle, apiKey);
+        // Force a re-render to update the chat list
+        setChatListVersion((v) => v + 1);
+      });
+    },
+    []
+  );
+
+  // Handle chat deletion
+  const handleDeleteChat = useCallback(() => {
+    deleteCurrentChat();
+    setChatListVersion((v) => v + 1);
+    navigate('/');
+  }, [deleteCurrentChat, navigate]);
+
   return (
     <div className="chat-page">
       <ChatHistory
@@ -56,6 +95,7 @@ export const Chat = ({ onLogout }: ChatProps = {}) => {
         chats={chats}
         onNewChat={handleNewChat}
         onSelectChat={handleSelectChat}
+        onRenameChat={handleRenameChat}
       />
       
       <div className="chat-container">
@@ -64,7 +104,7 @@ export const Chat = ({ onLogout }: ChatProps = {}) => {
           <div className="header-actions">
             {messages.length > 0 && (
               <button 
-                onClick={deleteCurrentChat} 
+                onClick={handleDeleteChat} 
                 className="clear-button" 
                 aria-label="Clear chat"
               >
@@ -111,7 +151,8 @@ export const Chat = ({ onLogout }: ChatProps = {}) => {
         </div>
         
         <div className="input-container">
-          <ChatInput onSend={sendMessage} disabled={isLoading} />
+          <ChatInput onSend={sendMessage} onFileUpload={uploadFile} disabled={isLoading} />
+          
         </div>
       </div>
     </div>
