@@ -3,9 +3,10 @@ import './ApiKeyLogin.css';
 
 interface ApiKeyLoginProps {
   onApiKeySubmit: (apiKey: string) => void;
+  onLogin: () => void;
 }
 
-export const ApiKeyLogin = ({ onApiKeySubmit }: ApiKeyLoginProps) => {
+export const ApiKeyLogin = ({ onApiKeySubmit, onLogin }: ApiKeyLoginProps) => {
   const [apiKey, setApiKey] = useState('');
   const [error, setError] = useState<string | null>(null);
 
@@ -22,14 +23,15 @@ export const ApiKeyLogin = ({ onApiKeySubmit }: ApiKeyLoginProps) => {
       return;
     }
 
-    onApiKeySubmit(apiKey);
+        onApiKeySubmit(apiKey);
+    onLogin();
     setError(null);
   };
 
   return (
     <div className="api-key-login">
       <div className="api-key-container">
-        <h1>Welcome to ChatGPT UI</h1>
+        <h1>Welcome to TuroGPT</h1>
         <p className="description">
           This application requires an OpenAI API key to function.
           Please enter your API key below to continue.

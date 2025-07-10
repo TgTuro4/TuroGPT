@@ -1,8 +1,111 @@
+.chat-page {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.chat-history {
+  width: 20%;  /* 20% of parent width */
+  min-width: 100px;  
+  max-width: 200px;
+  height: 100%;
+  background-color: var(--bg-color);
+  border-right: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  position: absolute;
+  z-index: 100;
+  left: -20%;  /* Match width */
+}
+
+.chat-history.open {
+  transform: translateX(100%);  /* Slide in the full width */
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.chat-history-content {
+  padding: 1rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.new-chat-button {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.new-chat-button:hover {
+  background-color: var(--primary-hover);
+}
+
+.chat-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chat-item {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border: 1px solid var(--border-color);
+}
+
+.chat-item:hover {
+  background-color: var(--hover-color);
+}
+
+.chat-item.active {
+  background-color: var(--active-color);
+  border-color: var(--primary-color);
+}
+
+.chat-title {
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chat-date {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.toggle-sidebar {
+  position: absolute;
+  right: -40px;
+  top: 1rem;
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-left: none;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 0 0.5rem 0.5rem 0;
+  font-size: 1.25rem;
+}
+
 .chat-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
-  max-width: 90%; /* Resized for more screen space */
+  width: 80%; /* Take remaining width */
   margin: 0 auto;
   background: var(--color-bg);
   color: var(--color-text);
@@ -11,6 +114,13 @@
   box-shadow: 0 0 30px var(--color-purple);
   position: relative;
   overflow: hidden;
+  flex: 1;
+  transition: margin-left 0.3s ease;
+  margin-left: 20%; /* Match sidebar width */
+}
+
+.chat-container.sidebar-open {
+  margin-left: 20%;
 }
 
 .chat-container::before {
@@ -140,13 +250,82 @@
   text-shadow: 0 0 5px var(--color-pink);
 }
 
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  padding-bottom: 0;
+}
+
+.input-container {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  background-color: var(--bg-color);
+}
+
+.typing-indicator {
+  display: flex;
+  gap: 0.5rem;
+  padding: 1rem;
+  justify-content: center;
+}
+
+.typing-indicator span {
+  width: 8px;
+  height: 8px;
+  background-color: var(--text-color);
+  border-radius: 50%;
+  display: inline-block;
+  opacity: 0.4;
+}
+
+.typing-indicator span:nth-child(1) {
+  animation: typing 1s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation: typing 1s infinite 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+  animation: typing 1s infinite 0.4s;
+}
+
+@keyframes typing {
+  0%, 100% { opacity: 0.4; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-4px); }
+}
+
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin: 1rem;
+  text-align: center;
+}
+
 /* Media queries for responsiveness */
 @media (min-width: 768px) {
   .chat-container {
-    max-width: 800px;
-    margin: 0 auto;
+    max-width: 100%;
     border-left: 1px solid #e6e6e6;
     border-right: 1px solid #e6e6e6;
+  }
+  .chat-history {
+    position: relative;
+    left: 0;
+    transform: none;
+    width: 20%;
+  }
+  
+  .chat-container {
+    margin-left: 20%; /* Match sidebar width */
+    width: 80%; /* Take remaining width */
+  }
+  
+  .toggle-sidebar {
+    display: none;
   }
 }
 
